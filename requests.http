@@ -1,0 +1,92 @@
+@uri = http://localhost:3412
+
+
+### WebHook test #1
+POST {{uri}}
+Accept: application/json
+
+{
+  "secret": "",
+  "ref": "refs/heads/master",
+  "before": "",
+  "after": "",
+  "compare_url": "",
+  "commits": [
+    {
+      "id": "",
+      "message": "Update README.md\n",
+      "url": "",
+      "author": {
+        "name": "myname",
+        "email": "i@am.com",
+        "username": ""
+      },
+      "committer": {
+        "name": "myname",
+        "email": "i@am.com",
+        "username": ""
+      },
+      "verification": null,
+      "timestamp": "2021-05-21T14:04:52+09:00",
+      "added": [],
+      "removed": [],
+      "modified": [
+        "README.md"
+      ]
+    }
+  ],
+  "head_commit": null,
+  "repository": {
+    "id": 1,
+    "owner": {"id":1,"login":"myid","full_name":"My full name","email":"i@am.com","avatar_url":"http://localhost:3000/user/avatar/myid/-1","language":"ko-KR","is_admin":false,"last_login":"2021-05-21T13:12:49+09:00","created":"2021-05-20T16:27:09+09:00","restricted":false,"username":"myid"},
+    "name": "my-git-project",
+    "full_name": "myid/my-git-project",
+    "description": "Deploy test",
+    "empty": false,
+    "private": true,
+    "fork": false,
+    "template": false,
+    "parent": null,
+    "mirror": false,
+    "size": 23,
+    "html_url": "http://localhost:3000/myid/my-git-project",
+    "ssh_url": "myid@localhost:myid/my-git-project.git",
+    "clone_url": "http://localhost:3000/myid/my-git-project.git",
+    "original_url": "",
+    "website": "",
+    "stars_count": 0,
+    "forks_count": 0,
+    "watchers_count": 1,
+    "open_issues_count": 0,
+    "open_pr_counter": 0,
+    "release_counter": 0,
+    "default_branch": "master",
+    "archived": false,
+    "created_at": "2021-05-20T16:31:30+09:00",
+    "updated_at": "2021-05-21T14:02:49+09:00",
+    "permissions": {
+      "admin": true,
+      "push": true,
+      "pull": true
+    },
+    "has_issues": true,
+    "internal_tracker": {
+      "enable_time_tracker": false,
+      "allow_only_contributors_to_track_time": true,
+      "enable_issue_dependencies": true
+    },
+    "has_wiki": true,
+    "has_pull_requests": true,
+    "has_projects": true,
+    "ignore_whitespace_conflicts": false,
+    "allow_merge_commits": true,
+    "allow_rebase": true,
+    "allow_rebase_explicit": true,
+    "allow_squash_merge": true,
+    "avatar_url": "",
+    "internal": false,
+    "mirror_interval": ""
+  },
+  "pusher": {"id":1,"login":"myid","full_name":"My full name","email":"i@am.com","avatar_url":"http://localhost:3000/user/avatar/myid/-1","language":"","is_admin":false,"last_login":"0001-01-01T00:00:00Z","created":"2021-05-20T16:27:09+09:00","restricted":false,"username":"myid"},
+  "sender": {"id":1,"login":"myid","full_name":"My full name","email":"i@am.com","avatar_url":"http://localhost:3000/user/avatar/myid/-1","language":"","is_admin":false,"last_login":"0001-01-01T00:00:00Z","created":"2021-05-20T16:27:09+09:00","restricted":false,"username":"myid"}
+}
