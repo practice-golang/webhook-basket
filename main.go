@@ -16,13 +16,15 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-//go:embed wb.ini
-var sampleINI string
-
 type Content struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
+
+//go:embed wb.ini
+var sampleINI string
+
+var listen string
 
 func setupINI() {
 	iniPath := "wb.ini"
@@ -47,6 +49,10 @@ func setupINI() {
 	}
 
 	if cfg != nil {
+		if cfg.Section("server").HasKey("LISTEN") {
+			listen = cfg.Section("server").Key("LISTEN").String()
+		}
+
 		if cfg.Section("path").HasKey("CLONED_REPO_ROOT") {
 			model.TempClonedRepoRoot = cfg.Section("path").Key("CLONED_REPO_ROOT").String()
 		}
@@ -74,8 +80,6 @@ func setupINI() {
 			model.FtpServerInfo.Password = cfg.Section("ftp").Key("PASSWORD").String()
 		}
 	}
-
-	log.Println("FTP server: ", model.FtpServerInfo.Host)
 }
 
 func HealthCheck(c *gin.Context) {
@@ -130,6 +134,8 @@ func DeleteReposRoot(c *gin.Context) {
 }
 
 func main() {
+	listen := "127.0.0.1:7749"
+
 	setupINI()
 
 	// Logging to a file.
@@ -154,5 +160,5 @@ func main() {
 	r.POST("/deploy", DeployRepository)
 	r.DELETE("/repos-root", DeleteReposRoot)
 
-	r.Run("127.0.0.1:7749")
+	r.Run(listen)
 }
