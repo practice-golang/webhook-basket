@@ -1,1 +1,1 @@
-127.0.0.1 - [Fri, 22 Jul 2022 20:43:02 KST] "POST /deploy?destination=/home/mysites HTTP/1.1 200 130.9897ms "Go-http-client/1.1" "
+127.0.0.1 - [Fri, 22 Jul 2022 21:27:44 KST] "POST /deploy?destination=/home/wwwuser/vpntry HTTP/1.1 200 940.0974ms "Go-http-client/1.1" "

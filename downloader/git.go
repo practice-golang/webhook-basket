@@ -4,23 +4,27 @@ import (
 	"log"
 	"os"
 	"webhook-basket/model"
+	"webhook-basket/uploader/config"
+	"webhook-basket/uploader/ftp"
+	"webhook-basket/uploader/sftp"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing/transport/http"
 )
 
 func CloneRepository(request model.Request) error {
 	var err error
+
+	if request.Destination == "" {
+		request.Destination = model.DeploymentRoot
+	}
+	request.Ftp = model.FtpServerInfo
 
 	repoName := request.Repository.Name
 	cloneURI := request.Repository.CloneURL
 
 	repoPath := model.CloneRepoRoot + "/" + repoName
 
-	auth := &http.BasicAuth{
-		Username: "edp1096",
-		Password: "01026473448",
-	}
+	auth := model.AuthInfo
 
 	// Clone
 	if _, err = os.Stat(repoPath + "/.git"); os.IsNotExist(err) {
@@ -30,15 +34,6 @@ func CloneRepository(request model.Request) error {
 			log.Println("Git clone error: ", err)
 		}
 	} else {
-		files, err := os.ReadDir(repoPath)
-		if err != nil {
-			log.Println("dir: ", err)
-		}
-
-		for _, f := range files {
-			log.Println(f.Name(), f.IsDir())
-		}
-
 		// pull existing
 		r, err := git.PlainOpen(repoPath)
 		if err != nil {
@@ -54,6 +49,22 @@ func CloneRepository(request model.Request) error {
 		if err != nil {
 			log.Println("Git pull error: ", err)
 		}
+	}
+
+	host := config.Host{
+		Hostname: request.Ftp.Host,
+		Port:     request.Ftp.Port,
+		Username: request.Ftp.Username,
+		Password: request.Ftp.Password,
+		SrcBase:  repoPath,
+		DstBase:  request.Destination,
+	}
+
+	switch host.Port {
+	case "21":
+		ftp.ProcMain(host)
+	case "22":
+		sftp.ProcMain(host)
 	}
 
 	return err

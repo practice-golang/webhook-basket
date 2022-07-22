@@ -1,9 +1,10 @@
 package model
 
 type Request struct {
-	Repository  Repository `json:"repository"`
-	Pusher      Pusher     `json:"pusher"`
-	Destination string     `json:"destination"`
+	Repository  Repository     `json:"repository"`  // Repository name and clone URL
+	Pusher      Pusher         `json:"pusher"`      // Pusher is the user who pushed the commit
+	Ftp         FtpHostSetting `json:"ftp"`         // ftp, sftp server info
+	Destination string         `json:"destination"` // Deployment Root on ftp, sftp server
 }
 
 type Repository struct {
