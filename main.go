@@ -5,8 +5,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"webhook-basket/downloader"
 	"webhook-basket/middleware"
 	"webhook-basket/model"
+	"webhook-basket/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,10 +37,36 @@ func PostSample(c *gin.Context) {
 }
 
 func DeployRepository(c *gin.Context) {
-	content := Content{}
-	c.BindJSON(&content)
+	destination := c.Query("destination")
+	if destination == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Deployment destination is required"})
+		return
+	}
 
-	c.JSON(http.StatusOK, content)
+	request := model.Request{}
+	c.BindJSON(&request)
+
+	request.Destination = destination
+
+	err := downloader.CloneRepository(request)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, request)
+}
+
+func DeleteReposRoot(c *gin.Context) {
+	destination := model.CloneRepoRoot
+
+	err := util.DeleteDirectory(destination)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
 func main() {
@@ -63,6 +91,7 @@ func main() {
 	r.GET("/health", HealthCheck)
 	r.POST("/post-sample", PostSample)
 	r.POST("/deploy", DeployRepository)
+	r.DELETE("/repos-root", DeleteReposRoot)
 
 	r.Run("127.0.0.1:7749")
 }
