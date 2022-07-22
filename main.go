@@ -57,7 +57,7 @@ func setupINI() {
 			model.TempClonedRepoRoot = cfg.Section("path").Key("CLONED_REPO_ROOT").String()
 		}
 		if cfg.Section("path").HasKey("DEPLOYMENT_ROOT") {
-			model.TempClonedRepoRoot = cfg.Section("path").Key("DEPLOYMENT_ROOT").String()
+			model.DeploymentRoot = cfg.Section("path").Key("DEPLOYMENT_ROOT").String()
 		}
 
 		if cfg.Section("git").HasKey("USERNAME") {
@@ -103,8 +103,7 @@ func PostSample(c *gin.Context) {
 func DeployRepository(c *gin.Context) {
 	destination := c.Query("destination")
 	if destination == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Deployment destination is required"})
-		return
+		destination = model.DeploymentRoot
 	}
 
 	request := model.Request{}
@@ -118,7 +117,7 @@ func DeployRepository(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, request)
+	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
 func DeleteReposRoot(c *gin.Context) {

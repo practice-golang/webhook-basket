@@ -13,5 +13,5 @@ Content-Type: application/json
     "content": "This is a test post"
 }
 
-### Delete cloning repos root
+### Delete temporary repos root
 DELETE {{uri}}/repos-root HTTP/1.1

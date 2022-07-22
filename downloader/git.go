@@ -1,6 +1,7 @@
 package downloader
 
 import (
+	"errors"
 	"log"
 	"os"
 	"webhook-basket/model"
@@ -15,8 +16,9 @@ func CloneRepository(request model.Request) error {
 	var err error
 
 	if request.Destination == "" {
-		request.Destination = model.DeploymentRoot
+		return errors.New("Deployment destination is required")
 	}
+
 	request.Ftp = model.FtpServerInfo
 
 	repoName := request.Repository.Name
