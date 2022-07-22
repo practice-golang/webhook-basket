@@ -1,6 +1,8 @@
 package main // import "webhook-basket"
 
 import (
+	_ "embed"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -11,11 +13,69 @@ import (
 	"webhook-basket/util"
 
 	"github.com/gin-gonic/gin"
+	"gopkg.in/ini.v1"
 )
+
+//go:embed wb.ini
+var sampleINI string
 
 type Content struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
+}
+
+func setupINI() {
+	iniPath := "wb.ini"
+
+	cfg, err := ini.Load(iniPath)
+	if err != nil {
+		f, err := os.Create(iniPath)
+		if err != nil {
+			log.Fatalln("Create INI: ", err)
+		}
+		defer f.Close()
+
+		_, err = f.WriteString(sampleINI + "\n")
+		if err != nil {
+			log.Fatalln("Create INI: ", err)
+		}
+
+		fmt.Println(iniPath + " is created")
+		fmt.Println("Please modify " + iniPath + " then run again")
+
+		os.Exit(1)
+	}
+
+	if cfg != nil {
+		if cfg.Section("path").HasKey("CLONED_REPO_ROOT") {
+			model.TempClonedRepoRoot = cfg.Section("path").Key("CLONED_REPO_ROOT").String()
+		}
+		if cfg.Section("path").HasKey("DEPLOYMENT_ROOT") {
+			model.TempClonedRepoRoot = cfg.Section("path").Key("DEPLOYMENT_ROOT").String()
+		}
+
+		if cfg.Section("git").HasKey("USERNAME") {
+			model.AuthInfo.Username = cfg.Section("git").Key("USERNAME").String()
+		}
+		if cfg.Section("git").HasKey("PASSWORD") {
+			model.AuthInfo.Password = cfg.Section("git").Key("PASSWORD").String()
+		}
+
+		if cfg.Section("ftp").HasKey("HOST") {
+			model.FtpServerInfo.Host = cfg.Section("ftp").Key("HOST").String()
+		}
+		if cfg.Section("ftp").HasKey("PORT") {
+			model.FtpServerInfo.Port = cfg.Section("ftp").Key("PORT").String()
+		}
+		if cfg.Section("ftp").HasKey("USERNAME") {
+			model.FtpServerInfo.Username = cfg.Section("ftp").Key("USERNAME").String()
+		}
+		if cfg.Section("ftp").HasKey("PASSWORD") {
+			model.FtpServerInfo.Password = cfg.Section("ftp").Key("PASSWORD").String()
+		}
+	}
+
+	log.Println("FTP server: ", model.FtpServerInfo.Host)
 }
 
 func HealthCheck(c *gin.Context) {
@@ -58,7 +118,7 @@ func DeployRepository(c *gin.Context) {
 }
 
 func DeleteReposRoot(c *gin.Context) {
-	destination := model.CloneRepoRoot
+	destination := model.TempClonedRepoRoot
 
 	err := util.DeleteDirectory(destination)
 	if err != nil {
@@ -70,8 +130,7 @@ func DeleteReposRoot(c *gin.Context) {
 }
 
 func main() {
-	gin.SetMode(gin.ReleaseMode)
-	gin.DisableConsoleColor()
+	setupINI()
 
 	// Logging to a file.
 	model.FileRequests, _ = os.OpenFile("requests.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, os.FileMode(0777))
@@ -79,6 +138,8 @@ func main() {
 	defer model.FileConnections.Close()
 	defer model.FileRequests.Close()
 
+	gin.SetMode(gin.ReleaseMode)
+	gin.DisableConsoleColor()
 	gin.DefaultWriter = io.MultiWriter(model.FileConnections)
 
 	r := gin.New()

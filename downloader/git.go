@@ -22,7 +22,7 @@ func CloneRepository(request model.Request) error {
 	repoName := request.Repository.Name
 	cloneURI := request.Repository.CloneURL
 
-	repoPath := model.CloneRepoRoot + "/" + repoName
+	repoPath := model.TempClonedRepoRoot + "/" + repoName
 
 	auth := model.AuthInfo
 
