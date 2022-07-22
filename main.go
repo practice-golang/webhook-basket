@@ -1,11 +1,10 @@
 package main // import "webhook-basket"
 
 import (
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
-	"time"
 	"webhook-basket/middleware"
 	"webhook-basket/model"
 
@@ -23,7 +22,19 @@ func HealthCheck(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func WriteContent(c *gin.Context) {
+func PostSample(c *gin.Context) {
+	queries := c.Request.URL.Query()
+	for k, v := range queries {
+		log.Println(k, v)
+	}
+
+	content := Content{}
+	c.BindJSON(&content)
+
+	c.JSON(http.StatusOK, content)
+}
+
+func DeployRepository(c *gin.Context) {
 	content := Content{}
 	c.BindJSON(&content)
 
@@ -42,30 +53,16 @@ func main() {
 
 	gin.DefaultWriter = io.MultiWriter(model.FileConnections)
 
-	// r := gin.Default()
 	r := gin.New()
 
-	// r.Use(gin.Logger())
-	r.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
-		return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" %s\"\n",
-			param.ClientIP,
-			param.TimeStamp.Format(time.RFC1123),
-			param.Method,
-			param.Path,
-			param.Request.Proto,
-			param.StatusCode,
-			param.Latency,
-			param.Request.UserAgent(),
-			param.ErrorMessage,
-		)
-	}))
-
+	r.Use(gin.LoggerWithFormatter(middleware.LogFormatter))
 	r.Use(middleware.RequestLoggerMiddleware())
 
 	r.Use(gin.Recovery())
 
 	r.GET("/health", HealthCheck)
-	r.POST("/write", WriteContent)
+	r.POST("/post-sample", PostSample)
+	r.POST("/deploy", DeployRepository)
 
-	r.Run("localhost:7749")
+	r.Run("127.0.0.1:7749")
 }
