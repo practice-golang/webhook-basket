@@ -6,6 +6,7 @@ type FtpHostSetting struct {
 	Port     string `json:"port"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Passive  bool   `json:"passive"`
 }
 
 var FtpServerInfo = FtpHostSetting{
@@ -14,4 +15,5 @@ var FtpServerInfo = FtpHostSetting{
 	Port:     "21",
 	Username: "username",
 	Password: "password",
+	Passive:  true,
 }

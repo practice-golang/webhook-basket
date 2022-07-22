@@ -44,7 +44,7 @@ func ProcMain(host config.Host) {
 	ftpConfig := goftp.Config{
 		User:            host.Username,
 		Password:        host.Password,
-		ActiveTransfers: true,
+		ActiveTransfers: !host.Passive,
 	}
 
 	fc, err := goftp.DialConfig(ftpConfig, host.Hostname+":"+host.Port)

@@ -61,6 +61,7 @@ func CloneAndUploadRepository(request model.Request) error {
 		Password: request.Ftp.Password,
 		SrcBase:  repoPath,
 		DstBase:  request.Destination,
+		Passive:  request.Ftp.Passive,
 	}
 
 	switch host.Type {

@@ -8,5 +8,6 @@ type Host struct {
 	Password string
 	SrcBase  string
 	DstBase  string
+	Passive  bool
 	// QueSheets []QueSheet
 }

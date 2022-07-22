@@ -85,6 +85,12 @@ func setupINI() {
 		if cfg.Section("ftp").HasKey("PASSWORD") {
 			model.FtpServerInfo.Password = cfg.Section("ftp").Key("PASSWORD").String()
 		}
+		if cfg.Section("ftp").HasKey("PASSIVE") {
+			model.FtpServerInfo.Passive, err = cfg.Section("ftp").Key("PASSIVE").Bool()
+			if err != nil {
+				model.FtpServerInfo.Passive = true
+			}
+		}
 	}
 }
 
