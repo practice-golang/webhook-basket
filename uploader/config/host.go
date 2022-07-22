@@ -1,6 +1,7 @@
 package config
 
 type Host struct {
+	Type     string
 	Hostname string
 	Port     string
 	Username string

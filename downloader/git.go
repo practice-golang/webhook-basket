@@ -12,7 +12,7 @@ import (
 	"github.com/go-git/go-git/v5"
 )
 
-func CloneRepository(request model.Request) error {
+func CloneAndUploadRepository(request model.Request) error {
 	var err error
 
 	if request.Destination == "" {
@@ -54,6 +54,7 @@ func CloneRepository(request model.Request) error {
 	}
 
 	host := config.Host{
+		Type:     request.Ftp.Type,
 		Hostname: request.Ftp.Host,
 		Port:     request.Ftp.Port,
 		Username: request.Ftp.Username,
@@ -62,10 +63,10 @@ func CloneRepository(request model.Request) error {
 		DstBase:  request.Destination,
 	}
 
-	switch host.Port {
-	case "21":
+	switch host.Type {
+	case "ftp":
 		ftp.ProcMain(host)
-	case "22":
+	case "sftp":
 		sftp.ProcMain(host)
 	}
 

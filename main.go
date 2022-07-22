@@ -21,13 +21,13 @@ type Content struct {
 	Content string `json:"content"`
 }
 
-//go:embed wb.ini
+//go:embed webhook-basket.ini
 var sampleINI string
 
 var listen string
 
 func setupINI() {
-	iniPath := "wb.ini"
+	iniPath := "webhook-basket.ini"
 
 	cfg, err := ini.Load(iniPath)
 	if err != nil {
@@ -44,6 +44,9 @@ func setupINI() {
 
 		fmt.Println(iniPath + " is created")
 		fmt.Println("Please modify " + iniPath + " then run again")
+		fmt.Println("")
+		fmt.Println("Press enter to exit")
+		fmt.Scanln()
 
 		os.Exit(1)
 	}
@@ -67,6 +70,9 @@ func setupINI() {
 			model.AuthInfo.Password = cfg.Section("git").Key("PASSWORD").String()
 		}
 
+		if cfg.Section("ftp").HasKey("TYPE") {
+			model.FtpServerInfo.Type = cfg.Section("ftp").Key("TYPE").String()
+		}
 		if cfg.Section("ftp").HasKey("HOST") {
 			model.FtpServerInfo.Host = cfg.Section("ftp").Key("HOST").String()
 		}
@@ -111,7 +117,7 @@ func DeployRepository(c *gin.Context) {
 
 	request.Destination = destination
 
-	err := downloader.CloneRepository(request)
+	err := downloader.CloneAndUploadRepository(request)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
