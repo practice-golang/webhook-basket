@@ -48,6 +48,13 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 * See https://docs.gitea.io/en-us/webhooks
 
 ## Trouble Shooting
+* Response nothing
+    * See https://docs.gitea.io/en-us/config-cheat-sheet/#webhook-webhook
+    * Add below option at app.ini of Gitea
+    ```ini
+    [webhook]
+    ALLOWED_HOST_LIST = *
+    ```
 * Request timeout
     * See https://docs.gitea.io/en-us/config-cheat-sheet/#webhook-webhook
     * Add below option at app.ini of Gitea
