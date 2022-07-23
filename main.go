@@ -113,15 +113,15 @@ func PostSample(c *gin.Context) {
 }
 
 func DeployRepository(c *gin.Context) {
-	destination := c.Query("destination")
-	if destination == "" {
-		destination = model.DeploymentRoot
-	}
-
 	request := model.Request{}
 	c.BindJSON(&request)
 
-	request.Destination = destination
+	request.DeployRoot = c.Query("deploy-root")
+	request.DeployName = c.Query("deploy-name")
+
+	if request.DeployRoot == "" {
+		request.DeployRoot = model.DeploymentRoot
+	}
 
 	err := downloader.CloneAndUploadRepository(request)
 	if err != nil {
@@ -133,9 +133,9 @@ func DeployRepository(c *gin.Context) {
 }
 
 func DeleteReposRoot(c *gin.Context) {
-	destination := model.TempClonedRepoRoot
+	target := model.TempClonedRepoRoot
 
-	err := util.DeleteDirectory(destination)
+	err := util.DeleteDirectory(target)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

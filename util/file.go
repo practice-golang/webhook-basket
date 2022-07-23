@@ -2,8 +2,8 @@ package util
 
 import "os"
 
-func DeleteDirectory(destination string) error {
-	err := os.RemoveAll(destination)
+func DeleteDirectory(target string) error {
+	err := os.RemoveAll(target)
 	if err != nil {
 		return err
 	}

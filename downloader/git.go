@@ -15,8 +15,8 @@ import (
 func CloneAndUploadRepository(request model.Request) error {
 	var err error
 
-	if request.Destination == "" {
-		return errors.New("Deployment destination is required")
+	if request.DeployRoot == "" {
+		return errors.New("Deployment root is required")
 	}
 
 	request.Ftp = model.FtpServerInfo
@@ -60,7 +60,9 @@ func CloneAndUploadRepository(request model.Request) error {
 		Username: request.Ftp.Username,
 		Password: request.Ftp.Password,
 		SrcBase:  repoPath,
-		DstBase:  request.Destination,
+		DstBase:  request.DeployRoot,
+		SrcName:  repoName,
+		DstName:  request.DeployName,
 		Passive:  request.Ftp.Passive,
 	}
 
