@@ -91,12 +91,18 @@ func ProcMain(host config.Host) {
 
 	for _, q := range ques {
 		srcPath := filepath.Join("", q.Name)
-		dstPath := filepath.Join(host.DstBase, strings.TrimPrefix(q.Name, srcCutPath))
+		dstPath := ""
+		if host.DstName != "" {
+			dstPath = strings.TrimPrefix(q.Name, srcCutPath)
+			dstPath = filepath.Join(host.DstName, strings.TrimPrefix(dstPath, host.SrcName))
+			dstPath = filepath.Join(host.DstBase, dstPath)
+		} else {
+			dstPath = filepath.Join(host.DstBase, strings.TrimPrefix(q.Name, srcCutPath))
+		}
 		dstPath = strings.ReplaceAll(dstPath, "\\", "/")
 
 		switch q.IsDIR {
 		case true:
-			// log.Println("mkdir", dstPath)
 			err = sc.MkdirAll(dstPath)
 			if err != nil {
 				panic(err)
