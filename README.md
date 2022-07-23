@@ -9,6 +9,8 @@ FTP, SFTP uploader for Gitea webhook
 
 ## Webhook setting
 
+* Should be set like below picture
+
 ![gitea](/doc/gitea.png)
 
 * Read following data from Gitea sending
