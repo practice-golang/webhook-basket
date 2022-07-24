@@ -3,7 +3,7 @@ FTP, SFTP uploader for Gitea webhook
 ## Behavior
 
 * Receive webhook signal from Gitea
-* Clone the repository at path in `CLONED_REPO_ROOT` of `webhook-basket.ini`
+* Clone the repository at path in `CLONED_REPO_ROOT` in `webhook-basket.ini`
 * Copy cloned files to web-server using `ftp` or `sftp`
 
 
