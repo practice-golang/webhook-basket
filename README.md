@@ -17,7 +17,7 @@ webhook-basket -h
 
 ## Limit
 * 1 process per 1 target web-server
-    * When ftp/sftp servers are more than 1, run `webhook-basket` with each of `ini` files
+    * When target ftp/sftp servers are more than 1, run `webhook-basket` with each of `ini` files
     * Example usage
         * Linux
         ```sh
