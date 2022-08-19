@@ -39,6 +39,7 @@ webhook-basket -h
 ![gitea](/doc/gitea.png)
 
 * `webhook-basket` read following data from Gitea sending
+    * See https://docs.gitea.io/en-us/webhooks
 ```json
 {
     "repository": {
@@ -70,7 +71,6 @@ http://localhost:7749/deploy?deploy-root=/home/newroot
 ```
 http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 ```
-* See https://docs.gitea.io/en-us/webhooks
 
 
 ## Trouble Shooting
