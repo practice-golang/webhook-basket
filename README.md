@@ -1,7 +1,7 @@
 FTP, SFTP uploader for Gitea (or Gogs) webhook
 
-## Behavior
-* Receive webhook signal from Gitea
+## How it works
+* Begin work when receive webhook signal from Gitea
 * Clone the repository at path in `CLONED_REPO_ROOT` in `webhook-basket.ini`
 * Copy cloned files to web-server using `ftp` or `sftp`
 
@@ -16,20 +16,21 @@ webhook-basket -h
 ```
 
 ## Limit
-* 1 process 1 target - When ftp/sftp servers are more than 1, run with each multiple `ini` files
-* Example usage
-    * Linux
-    ```sh
-    nohup webhook-basket -ini config_a.ini &
-    nohup webhook-basket -ini config_b.ini &
-    ...
-    ```
-    * Windows
-    ```powershell
-    start webhook-basket.exe -ini config_a.ini
-    start webhook-basket.exe -ini config_b.ini
-    ...
-    ```
+* 1 process per 1 target web-server
+    * When ftp/sftp servers are more than 1, run `webhook-basket` with each of `ini` files
+    * Example usage
+        * Linux
+        ```sh
+        nohup webhook-basket -ini config_a.ini &
+        nohup webhook-basket -ini config_b.ini &
+        ...
+        ```
+        * Windows
+        ```powershell
+        start webhook-basket.exe -ini config_a.ini
+        start webhook-basket.exe -ini config_b.ini
+        ...
+        ```
 
 
 ## Webhook setting
@@ -37,7 +38,7 @@ webhook-basket -h
 
 ![gitea](/doc/gitea.png)
 
-* Read following data from Gitea sending
+* `webhook-basket` read following data from Gitea sending
 ```json
 {
     "repository": {
