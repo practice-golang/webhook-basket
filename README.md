@@ -74,18 +74,12 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 
 
 ## Trouble Shooting
-* Response nothing
+* Response nothing, Request timeout
     * See https://docs.gitea.io/en-us/config-cheat-sheet/#webhook-webhook
-    * Add below option at app.ini of Gitea
+    * Append or modify the following options in `app.ini` of Gitea
     ```ini
     [webhook]
     ALLOWED_HOST_LIST = *
-    ```
-* Request timeout
-    * See https://docs.gitea.io/en-us/config-cheat-sheet/#webhook-webhook
-    * Add below option at app.ini of Gitea
-    ```ini
-    [webhook]
     DELIVER_TIMEOUT = 120
     ```
 
