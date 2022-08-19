@@ -171,7 +171,6 @@ func main() {
 	r.POST("/deploy", DeployRepository)
 	r.DELETE("/repos-root", DeleteReposRoot)
 
-	log.Println(listen)
-
+	fmt.Println("Listen: ", listen)
 	r.Run(listen)
 }
