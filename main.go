@@ -145,7 +145,7 @@ func DeleteReposRoot(c *gin.Context) {
 }
 
 func main() {
-	listen := "127.0.0.1:7749"
+	listen = "127.0.0.1:7749"
 
 	setupINI()
 
@@ -170,6 +170,8 @@ func main() {
 	r.POST("/post-sample", PostSample)
 	r.POST("/deploy", DeployRepository)
 	r.DELETE("/repos-root", DeleteReposRoot)
+
+	log.Println(listen)
 
 	r.Run(listen)
 }
