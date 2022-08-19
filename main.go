@@ -54,13 +54,13 @@ func setupINI() {
 	iniPath := "webhook-basket.ini"
 
 	if len(os.Args) > 1 {
-		FlagSetINI := flag.String("ini", "[filename.ini]", " Use [filename.ini] as ini file")
+		FlagSetINI := flag.String("ini", "[filename.ini]", " Run server with the ini file")
 		FlagGetINI := flag.Bool("getini", false, " Get sample ini file")
 
 		flag.Usage = func() {
 			flagSet := flag.CommandLine
 			fmt.Printf("Usage of %s:\n", "webhook-basket")
-			fmt.Printf("  %-20s Run server\n", "without option")
+			fmt.Printf("  %-19s Run server\n", "without option")
 
 			order := []string{"ini", "getini"}
 			for _, name := range order {
