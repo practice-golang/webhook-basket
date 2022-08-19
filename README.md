@@ -3,7 +3,7 @@ FTP, SFTP uploader for Gitea (or Gogs) webhook
 ## How it works
 * Begin work when receive webhook signal from Gitea
 * Clone the repository at path in `CLONED_REPO_ROOT` in `webhook-basket.ini`
-* Copy cloned files to web-server using `ftp` or `sftp`
+* Copy cloned files to target web-server via `ftp` or `sftp`
 
 ## Usage
 * Run
@@ -88,6 +88,7 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 ## Todo
 * [ ] Use name mapper feature of `go-ini/ini`
 * [ ] Auth(Secret) header
+* [ ] Exclude files parameter
 
 
 ## License
