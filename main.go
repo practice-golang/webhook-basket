@@ -2,6 +2,7 @@ package main // import "webhook-basket"
 
 import (
 	_ "embed"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -26,29 +27,78 @@ var sampleINI string
 
 var listen string
 
+func createINI(iniPath string) {
+	if _, err := os.Stat(iniPath); !os.IsNotExist(err) {
+		fmt.Printf("File %s already exists.\n", iniPath)
+		os.Exit(1)
+	}
+
+	f, err := os.Create(iniPath)
+	if err != nil {
+		log.Fatalln("Create INI: ", err)
+	}
+	defer f.Close()
+
+	_, err = f.WriteString(sampleINI + "\n")
+	if err != nil {
+		log.Fatalln("Create INI: ", err)
+	}
+
+	fmt.Println(iniPath + " is created")
+	fmt.Println("Please modify " + iniPath + " then run again")
+
+	os.Exit(1)
+}
+
 func setupINI() {
 	iniPath := "webhook-basket.ini"
 
+	if len(os.Args) > 1 {
+		FlagSetINI := flag.String("ini", "[filename.ini]", " Use [filename.ini] as ini file")
+		FlagGetINI := flag.Bool("getini", false, " Get sample ini file")
+
+		flag.Usage = func() {
+			flagSet := flag.CommandLine
+			fmt.Printf("Usage of %s:\n", "webhook-basket")
+			fmt.Printf("  %-20s Run server\n", "without option")
+
+			order := []string{"ini", "getini"}
+			for _, name := range order {
+				flag := flagSet.Lookup(name)
+				switch name {
+				case "ini":
+					fmt.Printf("  -%-18s%s\n", flag.Name+" "+flag.Value.String(), flag.Usage)
+				case "getini":
+					fmt.Printf("  -%-18s%s\n", flag.Name, flag.Usage)
+				}
+			}
+		}
+
+		flag.Parse()
+
+		if *FlagGetINI {
+			createINI(iniPath)
+		}
+
+		if *FlagSetINI != "" && *FlagSetINI != "[filename.ini]" {
+			iniPath = *FlagSetINI
+
+			if _, err := os.Stat(iniPath); os.IsNotExist(err) {
+				fmt.Printf("File %s not found\n", iniPath)
+				os.Exit(1)
+			}
+		}
+	}
+
 	cfg, err := ini.Load(iniPath)
 	if err != nil {
-		f, err := os.Create(iniPath)
-		if err != nil {
-			log.Fatalln("Create INI: ", err)
+		switch iniPath {
+		case "webhook-basket.ini":
+			createINI(iniPath)
+		default:
+			fmt.Println("Load INI: ", err)
+			os.Exit(1)
 		}
-		defer f.Close()
-
-		_, err = f.WriteString(sampleINI + "\n")
-		if err != nil {
-			log.Fatalln("Create INI: ", err)
-		}
-
-		fmt.Println(iniPath + " is created")
-		fmt.Println("Please modify " + iniPath + " then run again")
-		fmt.Println("")
-		fmt.Println("Press enter to exit")
-		fmt.Scanln()
-
-		os.Exit(1)
 	}
 
 	if cfg != nil {
