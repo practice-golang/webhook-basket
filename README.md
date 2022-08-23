@@ -86,7 +86,6 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 
 
 ## Todo
-* [ ] Use name mapper feature of `go-ini/ini`
 * [ ] Auth(Secret) header
 * [ ] Exclude files parameter
 
