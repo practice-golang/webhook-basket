@@ -37,7 +37,7 @@ webhook-basket -h
 
 
 ## Webhook setting
-* Should be set like below picture
+* Should be set like below picture. Also secret should be added if set in `ini` file
 
 ![gitea](/doc/gitea.png)
 
