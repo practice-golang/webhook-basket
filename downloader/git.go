@@ -16,7 +16,7 @@ func CloneAndUploadRepository(request model.Request) error {
 	var err error
 
 	if request.DeployRoot == "" {
-		return errors.New("Deployment root is required")
+		return errors.New("deployment root is required")
 	}
 
 	request.Ftp = model.FtpServerInfo
@@ -33,23 +33,23 @@ func CloneAndUploadRepository(request model.Request) error {
 		// clone new
 		_, err = git.PlainClone(repoPath, false, &git.CloneOptions{URL: cloneURI, Progress: os.Stdout, Auth: auth})
 		if err != nil {
-			log.Println("Git clone error: ", err)
+			log.Println("git clone error: ", err)
 		}
 	} else {
 		// pull existing
 		r, err := git.PlainOpen(repoPath)
 		if err != nil {
-			log.Println("Git pull error: ", err)
+			log.Println("git pull error: ", err)
 		}
 
 		w, err := r.Worktree()
 		if err != nil {
-			log.Println("Git pull error: ", err)
+			log.Println("git pull error: ", err)
 		}
 
 		err = w.Pull(&git.PullOptions{RemoteName: "origin", Auth: auth})
 		if err != nil {
-			log.Println("Git pull error: ", err)
+			log.Println("git pull error: ", err)
 		}
 	}
 
@@ -68,9 +68,9 @@ func CloneAndUploadRepository(request model.Request) error {
 
 	switch host.Type {
 	case "ftp":
-		ftp.ProcMain(host)
+		err = ftp.ProcMain(host)
 	case "sftp":
-		sftp.ProcMain(host)
+		err = sftp.ProcMain(host)
 	}
 
 	return err

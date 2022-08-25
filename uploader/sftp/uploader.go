@@ -1,6 +1,7 @@
 package sftp
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -11,6 +12,8 @@ import (
 
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
+
+	gi "github.com/sabhiram/go-gitignore"
 )
 
 // Upload file to sftp server
@@ -19,7 +22,7 @@ func UploadFile(sc *sftp.Client, localFile, remoteFile string) (err error) {
 
 	srcFile, err := os.Open(localFile)
 	if err != nil {
-		return fmt.Errorf("Unable to open local file: %v", err)
+		return fmt.Errorf("unable to open local file: %v", err)
 	}
 	defer srcFile.Close()
 
@@ -50,10 +53,18 @@ func UploadFile(sc *sftp.Client, localFile, remoteFile string) (err error) {
 	return nil
 }
 
-func ProcMain(host config.Host) {
+func ProcMain(host config.Host) (err error) {
 	srcBase := config.ReplacerSlash.Replace(host.SrcBase)
 	srcRoot := filepath.Base(srcBase)
 	srcCutPath := config.ReplacerSlash.Replace(strings.TrimSuffix(srcBase, srcRoot))
+
+	wbIgnorePath := filepath.Join(srcBase, ".wbignore")
+	wbIgnore, err := gi.CompileIgnoreFile(wbIgnorePath)
+	if err != nil {
+		if !strings.Contains(err.Error(), "The system cannot find the file specified") {
+			return
+		}
+	}
 
 	var sshConfig = &ssh.ClientConfig{
 		User:            host.Username,
@@ -63,14 +74,13 @@ func ProcMain(host config.Host) {
 
 	client, err := ssh.Dial("tcp", host.Hostname+":"+host.Port, sshConfig)
 	if err != nil {
-		panic("Failed to dial: " + err.Error())
+		return
 	}
-	// log.Println("Connected.")
 
 	// open an SFTP session over an existing ssh connection.
 	sc, err := sftp.NewClient(client)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
 	defer sc.Close()
 
@@ -101,17 +111,24 @@ func ProcMain(host config.Host) {
 		}
 		dstPath = strings.ReplaceAll(dstPath, "\\", "/")
 
+		if wbIgnore.MatchesPath(dstPath) {
+			continue
+		}
+
 		switch q.IsDIR {
 		case true:
 			err = sc.MkdirAll(dstPath)
 			if err != nil {
-				panic(err)
+				log.Println(err)
+				return
 			}
 		case false:
 			err = UploadFile(sc, srcPath, dstPath)
 			if err != nil {
-				log.Fatalf("could not upload file: %v", err)
+				return errors.New("could not upload file: " + err.Error())
 			}
 		}
 	}
+
+	return nil
 }

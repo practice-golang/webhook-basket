@@ -9,6 +9,8 @@ import (
 	"webhook-basket/uploader/config"
 
 	"github.com/secsy/goftp"
+
+	gi "github.com/sabhiram/go-gitignore"
 )
 
 // Upload file to ftp server
@@ -40,10 +42,18 @@ func UploadFile(fc *goftp.Client, localFile, remoteFile string) (err error) {
 	return nil
 }
 
-func ProcMain(host config.Host) {
+func ProcMain(host config.Host) (err error) {
 	srcBase := config.ReplacerSlash.Replace(host.SrcBase)
 	srcRoot := filepath.Base(srcBase)
 	srcCutPath := config.ReplacerSlash.Replace(strings.TrimSuffix(srcBase, srcRoot))
+
+	wbIgnorePath := filepath.Join(srcBase, ".wbignore")
+	wbIgnore, err := gi.CompileIgnoreFile(wbIgnorePath)
+	if err != nil {
+		if !strings.Contains(err.Error(), "The system cannot find the file specified") {
+			return
+		}
+	}
 
 	ftpConfig := goftp.Config{
 		User:            host.Username,
@@ -53,7 +63,7 @@ func ProcMain(host config.Host) {
 
 	fc, err := goftp.DialConfig(ftpConfig, host.Hostname+":"+host.Port)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
 	defer fc.Close()
 	// log.Println("Connected.")
@@ -85,6 +95,10 @@ func ProcMain(host config.Host) {
 		}
 		dstPath = strings.ReplaceAll(dstPath, "\\", "/")
 
+		if wbIgnore.MatchesPath(dstPath) {
+			continue
+		}
+
 		switch q.IsDIR {
 		case true:
 			_, err = fc.Mkdir(dstPath)
@@ -105,4 +119,6 @@ func ProcMain(host config.Host) {
 			}
 		}
 	}
+
+	return nil
 }
