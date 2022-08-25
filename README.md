@@ -88,6 +88,7 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 ## Todo
 * [ ] Auth(Secret) header
 * [ ] Exclude files parameter
+* [ ] Remove post-sample which is not required
 
 
 ## License
