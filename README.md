@@ -45,6 +45,7 @@ webhook-basket -h
     * See https://docs.gitea.io/en-us/webhooks
 ```json
 {
+    "secret": "3gEsCfjlV2ugRwgpU#w1*WaW*wa4NXgGmpCfkbG3", // optional. If not set in ini, ignored
     "repository": {
         "name": "sample-repo",
         "full_name": "practice-golang/sample-repo",
@@ -76,6 +77,14 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 ```
 
 
+## Delete temporary repository root
+* Send following request
+```sh
+DELETE uri/deploy-root
+Secret secRET12345 # optional. If not set in ini, ignored
+```
+
+
 ## Trouble Shooting
 * Response nothing, Request timeout
     * See https://docs.gitea.io/en-us/config-cheat-sheet/#webhook-webhook
@@ -85,6 +94,7 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
     ALLOWED_HOST_LIST = *
     DELIVER_TIMEOUT = 120
     ```
+
 
 ## API
 * `GET health` - Health check
