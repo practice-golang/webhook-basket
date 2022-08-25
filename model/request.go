@@ -1,6 +1,7 @@
 package model
 
 type Request struct {
+	Secret     string         `json:"secret"`      // Secret for authentication
 	Repository Repository     `json:"repository"`  // Repository name and clone URL
 	Pusher     Pusher         `json:"pusher"`      // Pusher is the user who pushed the commit
 	Ftp        FtpHostSetting `json:"ftp"`         // ftp, sftp server info

@@ -159,6 +159,13 @@ func DeployRepository(c *gin.Context) {
 	request := model.Request{}
 	c.BindJSON(&request)
 
+	if secret != "" {
+		if request.Secret != secret {
+			c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+			return
+		}
+	}
+
 	request.DeployRoot = c.Query("deploy-root")
 	request.DeployName = c.Query("deploy-name")
 
@@ -177,6 +184,13 @@ func DeployRepository(c *gin.Context) {
 
 func DeleteReposRoot(c *gin.Context) {
 	target := model.TempClonedRepoRoot
+
+	if secret != "" {
+		if c.Request.Header["Secret"][0] != secret {
+			c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+			return
+		}
+	}
 
 	err := util.DeleteDirectory(target)
 	if err != nil {
