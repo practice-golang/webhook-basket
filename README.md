@@ -5,6 +5,7 @@ FTP, SFTP uploader for Gitea (or Gogs) webhook
 * Clone the repository at path under `CLONED_REPO_ROOT` in `webhook-basket.ini`
 * Copy cloned files to target web-server via `ftp` or `sftp`
 
+
 ## Usage
 * Run
 ```sh
@@ -14,6 +15,7 @@ webhook-basket
 ```sh
 webhook-basket -h
 ```
+
 
 ## Limit
 * 1 process per 1 target web-server
@@ -83,6 +85,11 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
     ALLOWED_HOST_LIST = *
     DELIVER_TIMEOUT = 120
     ```
+
+## API
+* `GET health` - Health check
+* `POST deploy` - Receive webhook and deploy
+* `DELETE repos-root` - Delete temporary repository root
 
 
 ## Todo

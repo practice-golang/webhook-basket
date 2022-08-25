@@ -25,7 +25,7 @@ type Content struct {
 //go:embed webhook-basket.ini
 var sampleINI string
 
-var listen string
+var listen, secret string
 
 func createINI(iniPath string) {
 	if _, err := os.Stat(iniPath); !os.IsNotExist(err) {
@@ -101,9 +101,14 @@ func setupINI() {
 		}
 	}
 
+	secret = ""
+
 	if cfg != nil {
 		if cfg.Section("server").HasKey("LISTEN") {
 			listen = cfg.Section("server").Key("LISTEN").String()
+		}
+		if cfg.Section("server").HasKey("SECRET") {
+			secret = cfg.Section("server").Key("SECRET").String()
 		}
 
 		if cfg.Section("path").HasKey("CLONED_REPO_ROOT") {
