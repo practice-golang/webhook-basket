@@ -150,18 +150,6 @@ func HealthCheck(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func PostSample(c *gin.Context) {
-	queries := c.Request.URL.Query()
-	for k, v := range queries {
-		log.Println(k, v)
-	}
-
-	content := Content{}
-	c.BindJSON(&content)
-
-	c.JSON(http.StatusOK, content)
-}
-
 func DeployRepository(c *gin.Context) {
 	request := model.Request{}
 	c.BindJSON(&request)
@@ -217,7 +205,6 @@ func main() {
 	r.Use(gin.Recovery())
 
 	r.GET("/health", HealthCheck)
-	r.POST("/post-sample", PostSample)
 	r.POST("/deploy", DeployRepository)
 	r.DELETE("/repos-root", DeleteReposRoot)
 
