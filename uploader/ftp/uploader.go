@@ -17,7 +17,7 @@ func UploadFile(fc *goftp.Client, localFile, remoteFile string) (err error) {
 
 	srcFile, err := os.Open(localFile)
 	if err != nil {
-		return fmt.Errorf("Unable to open local file: %v", err)
+		return fmt.Errorf("unable to open local file: %v", err)
 	}
 	defer srcFile.Close()
 
@@ -33,7 +33,7 @@ func UploadFile(fc *goftp.Client, localFile, remoteFile string) (err error) {
 
 	err = fc.Store(remoteFile, srcFile)
 	if err != nil {
-		return fmt.Errorf("Unable to upload local file: %v", err)
+		return fmt.Errorf("unable to upload local file: %v", err)
 	}
 	// log.Printf("%d bytes copied", bytes)
 
@@ -41,6 +41,10 @@ func UploadFile(fc *goftp.Client, localFile, remoteFile string) (err error) {
 }
 
 func ProcMain(host config.Host) {
+	srcBase := config.ReplacerSlash.Replace(host.SrcBase)
+	srcRoot := filepath.Base(srcBase)
+	srcCutPath := config.ReplacerSlash.Replace(strings.TrimSuffix(srcBase, srcRoot))
+
 	ftpConfig := goftp.Config{
 		User:            host.Username,
 		Password:        host.Password,
@@ -53,10 +57,6 @@ func ProcMain(host config.Host) {
 	}
 	defer fc.Close()
 	// log.Println("Connected.")
-
-	srcBase := config.ReplacerSlash.Replace(host.SrcBase)
-	srcRoot := filepath.Base(srcBase)
-	srcCutPath := config.ReplacerSlash.Replace(strings.TrimSuffix(srcBase, srcRoot))
 
 	ques := []config.QueSheet{}
 

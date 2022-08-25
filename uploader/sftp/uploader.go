@@ -36,14 +36,14 @@ func UploadFile(sc *sftp.Client, localFile, remoteFile string) (err error) {
 	// Note: SFTP Go doesn't support O_RDWR mode
 	dstFile, err := sc.OpenFile(remoteFile, (os.O_WRONLY | os.O_CREATE | os.O_TRUNC))
 	if err != nil {
-		return fmt.Errorf("Unable to open remote file: %v", err)
+		return fmt.Errorf("unable to open remote file: %v", err)
 	}
 	defer dstFile.Close()
 
 	// bytes, err := io.Copy(dstFile, srcFile)
 	_, err = io.Copy(dstFile, srcFile)
 	if err != nil {
-		return fmt.Errorf("Unable to upload local file: %v", err)
+		return fmt.Errorf("unable to upload local file: %v", err)
 	}
 	// log.Printf("%d bytes copied", bytes)
 
@@ -51,6 +51,10 @@ func UploadFile(sc *sftp.Client, localFile, remoteFile string) (err error) {
 }
 
 func ProcMain(host config.Host) {
+	srcBase := config.ReplacerSlash.Replace(host.SrcBase)
+	srcRoot := filepath.Base(srcBase)
+	srcCutPath := config.ReplacerSlash.Replace(strings.TrimSuffix(srcBase, srcRoot))
+
 	var sshConfig = &ssh.ClientConfig{
 		User:            host.Username,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
@@ -69,10 +73,6 @@ func ProcMain(host config.Host) {
 		log.Fatal(err)
 	}
 	defer sc.Close()
-
-	srcBase := config.ReplacerSlash.Replace(host.SrcBase)
-	srcRoot := filepath.Base(srcBase)
-	srcCutPath := config.ReplacerSlash.Replace(strings.TrimSuffix(srcBase, srcRoot))
 
 	ques := []config.QueSheet{}
 
