@@ -1,8 +1,9 @@
 @uri = http://localhost:7749
-
+@secret = secRET12345
 
 ### Health check
 GET {{uri}}/health HTTP/1.1
 
 ### Delete temporary repos root
 DELETE {{uri}}/repos-root HTTP/1.1
+Secret: {{secret}}
