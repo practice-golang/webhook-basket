@@ -49,11 +49,7 @@ webhook-basket -h
         "name": "sample-repo",
         "full_name": "practice-golang/sample-repo",
         "clone_url": "http://localhost:3000/practice-golang/sample-repo.git",
-    },
-    "pusher": {
-        "username": "practice-golang",
-        "email": "practice-golang@noreply.example.org",
-    },
+    }
 }
 ```
 
