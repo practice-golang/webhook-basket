@@ -1,7 +1,7 @@
 FTP, SFTP uploader for Gitea webhook
 
 ## How it works
-* Begin work when receive webhook signal from Gitea (or Gogs or Github)
+* Begin work when receive webhook signal from Gitea (or Gogs or Github or Gitlab)
 * Clone the repository at path under `CLONED_REPO_ROOT` in `webhook-basket.ini`
 * Copy cloned files to target web-server via `ftp` or `sftp`
 
