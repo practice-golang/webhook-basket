@@ -11,9 +11,16 @@ FTP, SFTP uploader for Gitea webhook
 ```sh
 webhook-basket
 ```
+
 * Help
 ```sh
 webhook-basket -h
+```
+
+* Build from source
+```sh
+go get https://github.com/practice-golang/webhook-basket
+go build -o bin/
 ```
 
 
