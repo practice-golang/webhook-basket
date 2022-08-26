@@ -59,7 +59,7 @@ http://localhost:7749/deploy?deploy-root=/home/newroot
 http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 ```
 
-* `webhook-basket` read following data from Gitea sending
+* `webhook-basket` use only following data from Gitea sending
     * See about webhook payload
         * https://docs.gitea.io/en-us/webhooks
         * https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads
