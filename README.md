@@ -20,12 +20,14 @@ webhook-basket -h
 * Build from source
     * Windows
     ```powershell
-    go get https://github.com/practice-golang/webhook-basket
+    # Because of pkg name, not work yet. just download this repo
+    # go get github.com/practice-golang/webhook-basket
     build.ps1
     ```
     * Linux
     ```sh
-    go get https://github.com/practice-golang/webhook-basket
+    # Because of pkg name, not work yet. just download this repo
+    # go get github.com/practice-golang/webhook-basket
     build.sh
     ```
 
