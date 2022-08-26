@@ -18,10 +18,16 @@ webhook-basket -h
 ```
 
 * Build from source
-```sh
-go get https://github.com/practice-golang/webhook-basket
-go build -o bin/
-```
+    * Windows
+    ```powershell
+    go get https://github.com/practice-golang/webhook-basket
+    build.ps1
+    ```
+    * Linux
+    ```sh
+    go get https://github.com/practice-golang/webhook-basket
+    build.sh
+    ```
 
 
 ## Limit
