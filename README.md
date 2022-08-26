@@ -118,6 +118,7 @@ Secret secRET12345 # optional. If not set in ini, will be ignored
 * `GET health` - Health check
 * `POST deploy` - Receive webhook and deploy
 * `DELETE repos-root` - Delete temporary repository root
+* See `requests.http`
 
 
 ## License
