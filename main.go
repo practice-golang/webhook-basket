@@ -26,6 +26,8 @@ type Content struct {
 	Content string `json:"content"`
 }
 
+var Version = "development"
+
 //go:embed webhook-basket.ini
 var sampleINI string
 
@@ -58,27 +60,36 @@ func setupINI() {
 	iniPath := "webhook-basket.ini"
 
 	if len(os.Args) > 1 {
+		FlagV := flag.Bool("v", false, " Print version")
+		FlagVersion := flag.CommandLine.Bool("version", false, " Print version")
 		FlagSetINI := flag.String("ini", "[filename.ini]", " Run server with the ini file")
 		FlagGetINI := flag.Bool("getini", false, " Get sample ini file")
 
 		flag.Usage = func() {
 			flagSet := flag.CommandLine
 			fmt.Printf("Usage of %s:\n", "webhook-basket")
-			fmt.Printf("  %-19s Run server\n", "without option")
+			fmt.Printf("  %-21s Run server\n", "without option")
 
-			order := []string{"ini", "getini"}
+			order := []string{"v", "ini", "getini"}
 			for _, name := range order {
 				flag := flagSet.Lookup(name)
 				switch name {
-				case "ini":
-					fmt.Printf("  -%-18s%s\n", flag.Name+" "+flag.Value.String(), flag.Usage)
+				case "v":
+					fmt.Printf("  -%-20s%s\n", "v, --version", flag.Usage)
 				case "getini":
-					fmt.Printf("  -%-18s%s\n", flag.Name, flag.Usage)
+					fmt.Printf("  -%-20s%s\n", flag.Name, flag.Usage)
+				case "ini":
+					fmt.Printf("  -%-20s%s\n", flag.Name+" "+flag.Value.String(), flag.Usage)
 				}
 			}
 		}
 
 		flag.Parse()
+
+		if *FlagV || *FlagVersion {
+			fmt.Printf("%s\n", Version)
+			os.Exit(0)
+		}
 
 		if *FlagGetINI {
 			createINI(iniPath)
