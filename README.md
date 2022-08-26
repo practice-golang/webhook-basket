@@ -41,22 +41,6 @@ webhook-basket -h
 
 ![gitea](/doc/gitea.png)
 
-* `webhook-basket` read following data from Gitea sending
-    * See about webhook payload
-        * https://docs.gitea.io/en-us/webhooks
-        * https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads
-        * https://gogs.io/docs/features/webhook
-        * https://docs.gitlab.com/ee/user/project/integrations/webhook_events.html
-```json
-{
-    "repository": {
-        "name": "sample-repo",
-        "full_name": "practice-golang/sample-repo",
-        "clone_url": "http://localhost:3000/practice-golang/sample-repo.git",
-    }
-}
-```
-
 * Set target URL like below
 ```
 http://localhost:7749/deploy
@@ -73,6 +57,22 @@ http://localhost:7749/deploy?deploy-root=/home/newroot
 * All above
 ```
 http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
+```
+
+* `webhook-basket` read following data from Gitea sending
+    * See about webhook payload
+        * https://docs.gitea.io/en-us/webhooks
+        * https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads
+        * https://gogs.io/docs/features/webhook
+        * https://docs.gitlab.com/ee/user/project/integrations/webhook_events.html
+```json
+{
+    "repository": {
+        "name": "sample-repo",
+        "full_name": "practice-golang/sample-repo",
+        "clone_url": "http://localhost:3000/practice-golang/sample-repo.git",
+    }
+}
 ```
 
 * Secret - `webhook-basket` read one header of following signatures which generated with `secret` in `ini` and in `secret form` in `webhook`
