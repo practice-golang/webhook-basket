@@ -111,7 +111,7 @@ func ProcMain(host config.Host) (err error) {
 		}
 		dstPath = strings.ReplaceAll(dstPath, "\\", "/")
 
-		if wbIgnore.MatchesPath(dstPath) {
+		if wbIgnore != nil && wbIgnore.MatchesPath(dstPath) {
 			continue
 		}
 

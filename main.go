@@ -1,7 +1,11 @@
 package main // import "webhook-basket"
 
 import (
+	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
 	_ "embed"
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"io"
@@ -156,12 +160,33 @@ func HealthCheck(c *gin.Context) {
 }
 
 func DeployRepository(c *gin.Context) {
+	var err error
+
+	ByteBody, _ := io.ReadAll(c.Request.Body)
+	c.Request.Body = io.NopCloser(bytes.NewBuffer(ByteBody))
+
 	request := model.Request{}
 	c.BindJSON(&request)
 
 	if secret != "" {
-		if request.Secret != secret {
-			c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+		sigKeys := []string{"X-Gitea-Signature", "X-Gogs-Signature", "X-Hub-Signature-256"}
+		signature := ""
+		for _, key := range sigKeys {
+			if c.Request.Header.Get(key) != "" {
+				signature = c.Request.Header.Get(key)
+				break
+			}
+		}
+
+		payload := ByteBody
+
+		hash := hmac.New(sha256.New, []byte(secret))
+		hash.Write(payload)
+
+		sig := hex.EncodeToString(hash.Sum(nil))
+
+		if signature != "sha256="+sig && signature != sig {
+			c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "not valid signature"})
 			return
 		}
 	}
@@ -173,7 +198,7 @@ func DeployRepository(c *gin.Context) {
 		request.DeployRoot = model.DeploymentRoot
 	}
 
-	err := downloader.CloneAndUploadRepository(request)
+	err = downloader.CloneAndUploadRepository(request)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -186,8 +211,8 @@ func DeleteReposRoot(c *gin.Context) {
 	target := model.TempClonedRepoRoot
 
 	if secret != "" {
-		if c.Request.Header["Secret"][0] != secret {
-			c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
+		if len(c.Request.Header["Secret"]) == 0 || c.Request.Header["Secret"][0] != secret {
+			c.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "unauthorized"})
 			return
 		}
 	}

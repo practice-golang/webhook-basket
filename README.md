@@ -45,7 +45,6 @@ webhook-basket -h
     * See https://docs.gitea.io/en-us/webhooks
 ```json
 {
-    "secret": "3gEsCfjlV2ugRwgpU#w1*WaW*wa4NXgGmpCfkbG3", // optional. If not set in ini, ignored
     "repository": {
         "name": "sample-repo",
         "full_name": "practice-golang/sample-repo",
@@ -76,12 +75,31 @@ http://localhost:7749/deploy?deploy-root=/home/newroot
 http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 ```
 
+* `webhook-basket` read one header of following signatures which generated with `secret` in `ini` and in `secret form` in `webhook`
+```
+X-Gitea-Signature: 2f8e..
+X-Gogs-Signature: 2f8e..
+X-Hub-Signature-256: sha256=2f8e..
+```
+
+
+## Exclude file(s) when upload to ftp/sftp
+* Add `.wbignore` to the repository
+* Syntax is same as `.gitignore`
+```
+.git
+.gitignore
+.wbignore
+
+README.md
+```
+
 
 ## Delete temporary repository root
 * Send following request
 ```sh
 DELETE uri/deploy-root
-Secret secRET12345 # optional. If not set in ini, ignored
+Secret secRET12345 # optional. If not set in ini, will be ignored
 ```
 
 
@@ -100,12 +118,6 @@ Secret secRET12345 # optional. If not set in ini, ignored
 * `GET health` - Health check
 * `POST deploy` - Receive webhook and deploy
 * `DELETE repos-root` - Delete temporary repository root
-
-
-## Todo
-* [ ] Auth(Secret) header
-* [ ] Exclude files parameter
-* [x] Remove post-sample which is not required
 
 
 ## License
