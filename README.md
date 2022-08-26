@@ -48,6 +48,8 @@ webhook-basket -h
         ...
         ```
 
+* No delete & flush to target ftp directory. append/overwrite only
+
 
 ## Webhook setting
 * Should be set like below picture. Also `secret` should be added if set it in `ini` file
