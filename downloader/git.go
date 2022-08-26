@@ -68,9 +68,9 @@ func CloneAndUploadRepository(request model.Request) error {
 
 	switch host.Type {
 	case "ftp":
-		err = ftp.ProcMain(host)
+		err = ftp.ProcUploadMain(host)
 	case "sftp":
-		err = sftp.ProcMain(host)
+		err = sftp.ProcUploadMain(host)
 	}
 
 	return err

@@ -42,7 +42,7 @@ func UploadFile(fc *goftp.Client, localFile, remoteFile string) (err error) {
 	return nil
 }
 
-func ProcMain(host config.Host) (err error) {
+func ProcUploadMain(host config.Host) (err error) {
 	srcBase := config.ReplacerSlash.Replace(host.SrcBase)
 	srcRoot := filepath.Base(srcBase)
 	srcCutPath := config.ReplacerSlash.Replace(strings.TrimSuffix(srcBase, srcRoot))
