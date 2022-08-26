@@ -37,12 +37,16 @@ webhook-basket -h
 
 
 ## Webhook setting
-* Should be set like below picture. Also secret should be added if set in `ini` file
+* Should be set like below picture. Also `secret` should be added if set it in `ini` file
 
 ![gitea](/doc/gitea.png)
 
 * `webhook-basket` read following data from Gitea sending
-    * See https://docs.gitea.io/en-us/webhooks
+    * See about webhook payload
+        * https://docs.gitea.io/en-us/webhooks
+        * https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads
+        * https://gogs.io/docs/features/webhook
+        * https://docs.gitlab.com/ee/user/project/integrations/webhook_events.html
 ```json
 {
     "repository": {
