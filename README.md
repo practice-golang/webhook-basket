@@ -88,7 +88,7 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 }
 ```
 
-* Secret - `webhook-basket` read one header of following signatures which generated with `secret` in `ini` and in `secret form` in `webhook`
+* Secret - `webhook-basket` read one header of following signatures which generated with `secret` in `ini` and in `secret form` in `webhook`.
 ```
 X-Gitea-Signature: 2f8e..
 X-Gogs-Signature: 2f8e..
@@ -99,7 +99,6 @@ X-Hub-Signature-256: sha256=2f8e..
 ## Exclude file(s) when upload to ftp/sftp
 * Add `.wbignore` to the target repository
 * Syntax is same as `.gitignore`.
-
 ```.gitignore
 .git
 .gitignore
