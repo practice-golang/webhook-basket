@@ -80,7 +80,7 @@ http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 ```
 * When root is root(/)
 ```powershell
-http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
+http://localhost:7749/deploy?deploy-name=othername&deploy-root=/
 ```
 
 
