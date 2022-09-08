@@ -1,12 +1,14 @@
 FTP, SFTP uploader for Gitea webhook
 
 ## How it works
+
 * Begin work when receive webhook signal from Gitea (or Gogs or Github or Gitlab)
 * Clone the repository at path under `CLONED_REPO_ROOT` in `webhook-basket.ini`
 * Copy cloned files to target web-server via `ftp` or `sftp`
 
 
 ## Usage
+
 * Run
 ```sh
 webhook-basket
@@ -33,9 +35,10 @@ webhook-basket -h
 
 
 ## Limit
+
 * 1 process per 1 target web-server
-    * When target ftp/sftp servers are more than 1, run several `webhook-basket` with each of `ini` files
-    * Listening port of each `ini` files must be set different number
+    * If target ftp/sftp servers are more than 1, several `webhook-basket` should be run with each of `ini` files
+    * Listening port in each `ini` files have to be set different number
     * Example usage
         * Linux
         ```sh
@@ -50,31 +53,36 @@ webhook-basket -h
         ...
         ```
 
-* No delete & flush to target ftp directory. append/overwrite only
+* There's no delete & flush target ftp directory. Only append and overwrite
 
 
 ## Webhook setting
+
 * Should be set like below picture. Also `secret` should be added if set it in `ini` file
 
 ![gitea](/doc/gitea.png)
 
 * Set target URL like below
-```
+```powershell
 http://localhost:7749/deploy
 ```
-
 * Add `deploy-name` parameter when site name is different from name of the repository
-```
+```powershell
 http://localhost:7749/deploy?deploy-name=othername
 ```
 * Add `deploy-root` parameter when deployment root is different from the path in `webhook-basket.ini`
-```
+```powershell
 http://localhost:7749/deploy?deploy-root=/home/newroot
 ```
 * All above
-```
+```powershell
 http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
 ```
+* When root is root(/)
+```powershell
+http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
+```
+
 
 * `webhook-basket` use only following data from Gitea sending
     * See about webhook payload
@@ -116,7 +124,7 @@ README.md
 * Send following request
 ```sh
 DELETE uri/deploy-root
-Secret secRET12345 # optional. If not set in ini, will be ignored
+Secret secRET12345 # optional. If not set in ini, this will be ignored
 ```
 
 
