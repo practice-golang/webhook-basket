@@ -15,6 +15,7 @@ func DeleteDirectory(target string) error {
 	return nil
 }
 
+// https://hwdhyeon.github.io/golang/how-to-use-ssh-in-golang
 func ReadSshPemKey(file string) (authMethod ssh.AuthMethod, err error) {
 	buf, err := os.ReadFile(file)
 	if err != nil {

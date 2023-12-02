@@ -256,7 +256,7 @@ func main() {
 	setupINI()
 
 	// Logging to a file.
-	model.FileRequests, _ = os.OpenFile("requests.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, os.FileMode(0777))
+	model.FileRequests, _ = os.OpenFile("requests.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, os.FileMode(0644))
 	model.FileConnections, _ = os.Create("connections.log")
 	defer model.FileConnections.Close()
 	defer model.FileRequests.Close()

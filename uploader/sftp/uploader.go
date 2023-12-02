@@ -59,11 +59,14 @@ func ProcUploadMain(host config.Host) (err error) {
 	srcRoot := filepath.Base(srcBase)
 	srcCutPath := config.ReplacerSlash.Replace(strings.TrimSuffix(srcBase, srcRoot))
 
+	var wbIgnore *gi.GitIgnore
 	wbIgnorePath := filepath.Join(srcBase, ".wbignore")
-	wbIgnore, err := gi.CompileIgnoreFile(wbIgnorePath)
-	if err != nil {
-		if !strings.Contains(err.Error(), "The system cannot find the file specified") {
-			return
+	if _, err = os.Stat(wbIgnorePath); err == nil {
+		wbIgnore, err = gi.CompileIgnoreFile(wbIgnorePath)
+		if err != nil {
+			if !strings.Contains(err.Error(), "The system cannot find '.wbignore'") {
+				return
+			}
 		}
 	}
 
@@ -85,7 +88,7 @@ func ProcUploadMain(host config.Host) (err error) {
 
 	client, err := ssh.Dial("tcp", host.Hostname+":"+host.Port, sshConfig)
 	if err != nil {
-		return
+		return err
 	}
 
 	// open an SFTP session over an existing ssh connection.
