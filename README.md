@@ -77,10 +77,12 @@ http://localhost:7749/deploy?deploy-root=/home/newroot
 * All above
 ```powershell
 http://localhost:7749/deploy?deploy-name=othername&deploy-root=/home/newroot
+# Files will be copied to /home/newroot/othername/
 ```
 * When root is root(/)
 ```powershell
 http://localhost:7749/deploy?deploy-name=othername&deploy-root=/
+# Files will be copied to /othername/
 ```
 
 
