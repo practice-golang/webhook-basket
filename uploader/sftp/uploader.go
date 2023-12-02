@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 	"webhook-basket/uploader/config"
+	"webhook-basket/util"
 
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
@@ -66,10 +67,20 @@ func ProcUploadMain(host config.Host) (err error) {
 		}
 	}
 
+	authMethod := []ssh.AuthMethod{ssh.Password(host.Password)}
+	if host.UseSshKey {
+		signer, err := util.ReadSshPemKey(host.SshKeyPath)
+		if err != nil {
+			return err
+		}
+
+		authMethod = []ssh.AuthMethod{signer}
+	}
+
 	var sshConfig = &ssh.ClientConfig{
 		User:            host.Username,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-		Auth:            []ssh.AuthMethod{ssh.Password(host.Password)},
+		Auth:            authMethod,
 	}
 
 	client, err := ssh.Dial("tcp", host.Hostname+":"+host.Port, sshConfig)

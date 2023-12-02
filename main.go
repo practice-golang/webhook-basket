@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"webhook-basket/downloader"
 	"webhook-basket/middleware"
 	"webhook-basket/model"
@@ -154,6 +155,18 @@ func setupINI() {
 		}
 		if cfg.Section("ftp").HasKey("PASSWORD") {
 			model.FtpServerInfo.Password = cfg.Section("ftp").Key("PASSWORD").String()
+		}
+		if cfg.Section("ftp").HasKey("USE_SSH_KEY") {
+			model.FtpServerInfo.SshKeyPath = ""
+			model.FtpServerInfo.UseSshKey, err = cfg.Section("ftp").Key("USE_SSH_KEY").Bool()
+			if err != nil {
+				model.FtpServerInfo.UseSshKey = true
+				if cfg.Section("ftp").HasKey("SSH_KEY_PATH") {
+					model.FtpServerInfo.SshKeyPath = strings.TrimSpace(cfg.Section("ftp").Key("SSH_KEY_PATH").String())
+				} else {
+					model.FtpServerInfo.UseSshKey = false
+				}
+			}
 		}
 		if cfg.Section("ftp").HasKey("PASSIVE") {
 			model.FtpServerInfo.Passive, err = cfg.Section("ftp").Key("PASSIVE").Bool()
