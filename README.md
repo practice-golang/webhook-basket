@@ -34,9 +34,9 @@ webhook-basket -h
     ```
 
 
-## Limit
+## Behavior
 
-* 1 process per 1 target web-server
+* Run 1 process per 1 target web-server
     * If target ftp/sftp servers are more than 1, several `webhook-basket` should be run with each of `ini` files
     * Listening port in each `ini` files have to be set different number
     * Example usage
@@ -53,7 +53,7 @@ webhook-basket -h
         ...
         ```
 
-* There's no delete & flush target ftp directory. Only append and overwrite
+* There's no delete & flush target ftp directory. Only appending or overwriting
 
 
 ## Webhook setting
