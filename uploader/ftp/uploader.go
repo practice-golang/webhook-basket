@@ -47,11 +47,14 @@ func ProcUploadMain(host config.Host) (err error) {
 	srcRoot := filepath.Base(srcBase)
 	srcCutPath := config.ReplacerSlash.Replace(strings.TrimSuffix(srcBase, srcRoot))
 
+	var wbIgnore *gi.GitIgnore
 	wbIgnorePath := filepath.Join(srcBase, ".wbignore")
-	wbIgnore, err := gi.CompileIgnoreFile(wbIgnorePath)
-	if err != nil {
-		if !strings.Contains(err.Error(), "The system cannot find the file specified") {
-			return
+	if _, err = os.Stat(wbIgnorePath); err == nil {
+		wbIgnore, err = gi.CompileIgnoreFile(wbIgnorePath)
+		if err != nil {
+			if !strings.Contains(err.Error(), "The system cannot find the file specified") {
+				return
+			}
 		}
 	}
 
@@ -83,6 +86,8 @@ func ProcUploadMain(host config.Host) (err error) {
 		return
 	}
 
+	dstBase := filepath.Join(host.DstBase, host.DstName)
+
 	for _, q := range ques {
 		srcPath := filepath.Join("", q.Name)
 		dstPath := ""
@@ -95,7 +100,8 @@ func ProcUploadMain(host config.Host) (err error) {
 		}
 		dstPath = strings.ReplaceAll(dstPath, "\\", "/")
 
-		if wbIgnore != nil && wbIgnore.MatchesPath(dstPath) {
+		relPathForIgnoreCheck := strings.TrimPrefix(dstPath, dstBase)
+		if wbIgnore != nil && wbIgnore.MatchesPath(relPathForIgnoreCheck) {
 			continue
 		}
 

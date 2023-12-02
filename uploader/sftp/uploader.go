@@ -113,6 +113,8 @@ func ProcUploadMain(host config.Host) (err error) {
 		return
 	}
 
+	dstBase := filepath.Join(host.DstBase, host.DstName)
+
 	for _, q := range ques {
 		srcPath := filepath.Join("", q.Name)
 		dstPath := ""
@@ -125,7 +127,8 @@ func ProcUploadMain(host config.Host) (err error) {
 		}
 		dstPath = strings.ReplaceAll(dstPath, "\\", "/")
 
-		if wbIgnore != nil && wbIgnore.MatchesPath(dstPath) {
+		relPathForIgnoreCheck := strings.TrimPrefix(dstPath, dstBase)
+		if wbIgnore != nil && wbIgnore.MatchesPath(relPathForIgnoreCheck) {
 			continue
 		}
 
