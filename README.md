@@ -110,9 +110,9 @@ X-Hub-Signature-256: sha256=2f8e..
 
 ## Exclude file(s) when upload to ftp/sftp
 * Add `.wbignore` to the target repository
-* Syntax is same as `.gitignore`.
+* Syntax is similar with `.gitignore`.
 ```.gitignore
-.git
+/.git
 .gitignore
 .wbignore
 
