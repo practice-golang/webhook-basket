@@ -159,7 +159,7 @@ func setupINI() {
 		if cfg.Section("ftp").HasKey("USE_SSH_KEY") {
 			model.FtpServerInfo.SshKeyPath = ""
 			model.FtpServerInfo.UseSshKey, err = cfg.Section("ftp").Key("USE_SSH_KEY").Bool()
-			if err != nil {
+			if err == nil {
 				model.FtpServerInfo.UseSshKey = true
 				if cfg.Section("ftp").HasKey("SSH_KEY_PATH") {
 					model.FtpServerInfo.SshKeyPath = strings.TrimSpace(cfg.Section("ftp").Key("SSH_KEY_PATH").String())
@@ -224,7 +224,7 @@ func DeployRepository(c *gin.Context) {
 
 	err = downloader.CloneAndUploadRepository(request)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error - clone and upload repository": err.Error()})
 		return
 	}
 

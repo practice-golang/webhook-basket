@@ -54,24 +54,22 @@ func CloneAndUploadRepository(request model.Request) error {
 	}
 
 	host := config.Host{
-		Type:      request.Ftp.Type,
-		Hostname:  request.Ftp.Host,
-		Port:      request.Ftp.Port,
-		Username:  request.Ftp.Username,
-		Password:  request.Ftp.Password,
-		SrcBase:   repoPath,
-		DstBase:   request.DeployRoot,
-		SrcName:   repoName,
-		DstName:   request.DeployName,
-		UseSshKey: request.Ftp.UseSshKey,
-		Passive:   request.Ftp.Passive,
+		Type:       request.Ftp.Type,
+		Hostname:   request.Ftp.Host,
+		Port:       request.Ftp.Port,
+		Username:   request.Ftp.Username,
+		Password:   request.Ftp.Password,
+		SshKeyData: request.Ftp.SshKeyPath,
+		SrcBase:    repoPath,
+		DstBase:    request.DeployRoot,
+		SrcName:    repoName,
+		DstName:    request.DeployName,
+		UseSshKey:  request.Ftp.UseSshKey,
+		Passive:    request.Ftp.Passive,
 	}
 
-	// Todo: ssh key data from ssh key path
-	// https://gist.github.com/Skarlso/34321a230cf0245018288686c9e70b2d
-
-	if request.Ftp.UseSshKey {
-		host.SshKeyData = request.Ftp.SshKeyPath
+	if host.UseSshKey {
+		host.SshKeyPath = request.Ftp.SshKeyPath
 	}
 
 	switch host.Type {
