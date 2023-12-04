@@ -65,14 +65,20 @@ webhook-basket -h
 * Set target URL like below
 ```powershell
 http://localhost:7749/deploy
+# Files will be copied to DEPLOYMENT_ROOT
+# DEPLOYMENT_ROOT variable is in ini file
 ```
 * Add `deploy-name` parameter when site name is different from name of the repository
 ```powershell
 http://localhost:7749/deploy?deploy-name=othername
+# Files will be copied to DEPLOYMENT_ROOT/othername
+# DEPLOYMENT_ROOT variable is in ini file
 ```
 * Add `deploy-root` parameter when deployment root is different from the path in `webhook-basket.ini`
 ```powershell
 http://localhost:7749/deploy?deploy-root=/home/newroot
+# Files will be copied to /home/newroot/json_repository_name
+# json_repository_name is in requested json data
 ```
 * All above
 ```powershell
