@@ -112,10 +112,14 @@ func ProcUploadMain(host config.Host) (err error) {
 				if err.Error() == "unexpected response: 550-Directory already exists" {
 					continue
 				}
+				if err.Error() == "unexpected response: 550-Directory with same name already exists" {
+					continue
+				}
 				if err.Error() == "failed parsing directory name: Directory created successfully" {
 					continue
 				}
 
+				log.Println("DIR: ", dstPath)
 				log.Println("DIR: ", err)
 			}
 		case false:
